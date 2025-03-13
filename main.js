@@ -5,7 +5,7 @@ const swiper = new Swiper('.swiper', {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
     },
-    
+
     // Default parameters
     slidesPerView: 1,
     spaceBetween: 30,
@@ -14,7 +14,7 @@ const swiper = new Swiper('.swiper', {
     centeredSlides: true,
     effect: 'coverflow',
     grabCursor: true,
-    
+
     // Coverflow effect
     coverflowEffect: {
         rotate: 0,
@@ -23,7 +23,7 @@ const swiper = new Swiper('.swiper', {
         modifier: 1,
         slideShadows: false,
     },
-    
+
     // Responsive breakpoints
     breakpoints: {
         // when window width is >= 480px
@@ -64,15 +64,15 @@ navLinks.forEach((link) => {
 });
 
 // Change navbar background on scroll (optional)
-window.onscroll = function() {
+window.onscroll = function () {
     if (window.scrollY > 10) {
         document.querySelector(".navbar").style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.1)";
     } else {
         document.querySelector(".navbar").style.boxShadow = "none";
     }
-};
-(function() {
-    document.onkeydown = function(e) {
+};/* 
+(function () {
+    document.onkeydown = function (e) {
         if (e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || (e.ctrlKey && e.key === "U")) {
             return false;
         }
@@ -80,7 +80,7 @@ window.onscroll = function() {
 
     setInterval(() => {
         const devtools = /./;
-        devtools.toString = function() {
+        devtools.toString = function () {
             throw new Error("DevTools detected");
         };
         console.log("%c", devtools);
@@ -92,4 +92,4 @@ document.addEventListener("keydown", (event) => {
     if (event.ctrlKey && ["u", "s", "h", "i", "j"].includes(event.key.toLowerCase())) {
         event.preventDefault();
     }
-});
+}); */
