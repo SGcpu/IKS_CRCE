@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IKS Flipbook Gallery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ===== Base Styles ===== */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f5f0;
+            overflow-x: hidden;
+        }
+        
+        /* ===== Desktop Masonry Grid ===== */
+        .grid {
+            column-count: 3;
+            column-gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .grid-item {
+            break-inside: avoid;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            background: white;
+        }
+        
+        .grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .grid-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        
+        /* ===== Mobile Carousel ===== */
+        .mobile-carousel {
+            display: none;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+            padding: 0 20px;
+        }
+        
+        .carousel-slide {
+            min-width: 85%;
+            padding: 0 10px;
+        }
+        
+        .carousel-img-container {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            background: white;
+        }
+        
+        .carousel-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #d3c1a7;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        
+        .carousel-dot.active {
+            background: #8b5a2b;
+        }
+        
+        /* ===== Common Elements ===== */
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .filter-btn {
+            background: #f0e6d2;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #5c3a21;
+            transition: all 0.2s ease;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background: #8b5a2b;
+            color: white;
+        }
+        
+        .loader {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+        
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        
+        .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        
+        /* ===== Responsive ===== */
+        @media (max-width: 900px) {
+            .grid {
+                column-count: 2;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                display: none;
+            }
+            
+            .mobile-carousel {
+                display: block;
+            }
+            
+            .filter-controls {
+                flex-wrap: wrap;
+                padding: 15px 10px;
+            }
+            
+            .filter-btn {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="college_logo">
+                <a href="https://www.frcrce.ac.in/"><img src="logo.png" alt="Frcrce Logo"></a>
+            </div>
+            <button class="nav-toggle">
+                <span class="hamburger"></span>
+            </button>
+            <div class="nav_elements">
+                <a href="#">Home</a>
+                <a href="#">Incharge</a>
+                <a href="#">Syllabus</a>
+                <a href="#">Projects</a>
+                <a href="#">Gallery</a>
+                <a href="#">Media</a>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Filter Controls -->
+    <div class="filter-controls">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="workshops">Workshops</button>
+        <button class="filter-btn" data-filter="lectures">Lectures</button>
+        <button class="filter-btn" data-filter="events">Events</button>
+    </div>
+    
+    <!-- Desktop Masonry Grid -->
+    <div class="grid" id="image-grid">
+        <div class="grid-item" data-category="workshops">
+            <img src="images/flipbook/img_akshar.jpeg" alt="Akshar Workshop" class="grid-img" loading="lazy">
+        </div>
+        <div class="grid-item" data-category="lectures">
+            <img src="images/flipbook/img_anc.jpeg" alt="Ancient Science Lecture" class="grid-img" loading="lazy">
+        </div>
+        <div class="grid-item" data-category="events">
+            <img src="images/flipbook/img_desi.jpeg" alt="Desi Innovations Event" class="grid-img" loading="lazy">
+        </div>
+        <div class="grid-item" data-category="workshops">
+            <img src="images/flipbook/img_mr.jpeg" alt="Mathematical Roots Workshop" class="grid-img" loading="lazy">
+        </div>
+        <div class="grid-item" data-category="lectures">
+            <img src="images/flipbook/img_nat.jpeg" alt="Nature's Wisdom Lecture" class="grid-img" loading="lazy">
+        </div>
+        <div class="grid-item" data-category="events">
+            <img src="images/flipbook/img_vedas.jpeg" alt="Vedic Sciences Event" class="grid-img" loading="lazy">
+        </div>
+    </div>
+    
+    <!-- Mobile Carousel -->
+    <div class="mobile-carousel" id="mobile-carousel">
+        <div class="carousel-track" id="carousel-track">
+            <div class="carousel-slide">
+                <div class="carousel-img-container">
+                    <img src="images/akshar.jpeg" alt="Akshar Workshop" class="carousel-img">
+                </div>
+            </div>
+            <div class="carousel-slide">
+                <div class="carousel-img-container">
+                    <img src="images/anc.jpeg" alt="Ancient Science Lecture" class="carousel-img">
+                </div>
+            </div>
+            <div class="carousel-slide">
+                <div class="carousel-img-container">
+                    <img src="images/desi.jpeg" alt="Desi Innovations Event" class="carousel-img">
+                </div>
+            </div>
+            <div class="carousel-slide">
+                <div class="carousel-img-container">
+                    <img src="images/mr.jpeg" alt="Mathematical Roots Workshop" class="carousel-img">
+                </div>
+            </div>
+            <div class="carousel-slide">
+                <div class="carousel-img-container">
+                    <img src="images/nat.jpeg" alt="Nature's Wisdom Lecture" class="carousel-img">
+                </div>
+            </div>
+            <div class="carousel-slide">
+                <div class="carousel-img-container">
+                    <img src="images/vedas.jpeg" alt="Vedic Sciences Event" class="carousel-img">
+                </div>
+            </div>
+        </div>
+        <div class="carousel-nav" id="carousel-dots"></div>
+    </div>
+    
+    <!-- Loading Indicator -->
+    <div class="loader" id="loader">
+        <i class="fas fa-spinner fa-spin"></i>
+    </div>
+    
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <span class="close-lightbox">&times;</span>
+        <img class="lightbox-img" id="lightbox-image" src="" alt="">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const grid = document.getElementById('image-grid');
+            const loader = document.getElementById('loader');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-image');
+            const closeBtn = document.querySelector('.close-lightbox');
+            
+            // Mobile Carousel Elements
+            const carouselTrack = document.getElementById('carousel-track');
+            const carouselDots = document.getElementById('carousel-dots');
+            let currentSlide = 0;
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            // Initialize carousel dots
+            function initCarouselDots() {
+                const slides = document.querySelectorAll('.carousel-slide');
+                slides.forEach((slide, index) => {
+                    const dot = document.createElement('div');
+                    dot.classList.add('carousel-dot');
+                    if (index === 0) dot.classList.add('active');
+                    dot.addEventListener('click', () => goToSlide(index));
+                    carouselDots.appendChild(dot);
+                });
+            }
+            
+            // Go to specific slide
+            function goToSlide(index) {
+                const slides = document.querySelectorAll('.carousel-slide');
+                if (index >= slides.length || index < 0) return;
+                
+                currentSlide = index;
+                const slideWidth = slides[0].offsetWidth;
+                carouselTrack.style.transform = `translateX(-${currentSlide * (slideWidth + 20)}px)`;
+                
+                // Update dots
+                document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentSlide);
+                });
+            }
+            
+            // Handle touch events for swipe
+            function handleTouchStart(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            }
+            
+            function handleTouchEnd(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }
+            
+            function handleSwipe() {
+                if (touchEndX < touchStartX - 50) {
+                    // Swipe left - next slide
+                    goToSlide(currentSlide + 1);
+                } else if (touchEndX > touchStartX + 50) {
+                    // Swipe right - previous slide
+                    goToSlide(currentSlide - 1);
+                }
+            }
+            
+            // Initialize mobile carousel
+            function initMobileCarousel() {
+                initCarouselDots();
+                
+                // Add touch events
+                carouselTrack.addEventListener('touchstart', handleTouchStart, false);
+                carouselTrack.addEventListener('touchend', handleTouchEnd, false);
+                
+                // Add click events to carousel images
+                document.querySelectorAll('.carousel-img').forEach(img => {
+                    img.addEventListener('click', () => {
+                        lightboxImg.src = img.src;
+                        lightboxImg.alt = img.alt;
+                        lightbox.style.display = 'flex';
+                        document.body.style.overflow = 'hidden';
+                    });
+                });
+            }
+            
+            // Filter images by category
+            function filterImages(category) {
+                const allItems = document.querySelectorAll('.grid-item');
+                
+                allItems.forEach(item => {
+                    if (category === 'all' || item.dataset.category === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Open lightbox
+            function openLightbox(e) {
+                lightboxImg.src = e.target.src;
+                lightboxImg.alt = e.target.alt;
+                lightbox.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Close lightbox
+            function closeLightbox() {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+            
+            // Initialize event listeners
+            function initEventListeners() {
+                // Filter buttons
+                filterButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        filterButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        filterImages(button.dataset.filter);
+                    });
+                });
+                
+                // Lightbox close
+                closeBtn.addEventListener('click', closeLightbox);
+                lightbox.addEventListener('click', (e) => {
+                    if (e.target === lightbox) closeLightbox();
+                });
+                
+                // Add click events to desktop images
+                document.querySelectorAll('.grid-img').forEach(img => {
+                    img.addEventListener('click', openLightbox);
+                });
+            }
+            
+            // Initialize everything
+            initEventListeners();
+            if (window.innerWidth <= 768) {
+                initMobileCarousel();
+            }
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth <= 768 && !document.querySelector('.carousel-dot')) {
+                    initMobileCarousel();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

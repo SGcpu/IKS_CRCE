@@ -70,7 +70,7 @@ window.onscroll = function () {
     } else {
         document.querySelector(".navbar").style.boxShadow = "none";
     }
-};/* 
+};
 (function () {
     document.onkeydown = function (e) {
         if (e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || (e.ctrlKey && e.key === "U")) {
@@ -92,4 +92,4 @@ document.addEventListener("keydown", (event) => {
     if (event.ctrlKey && ["u", "s", "h", "i", "j"].includes(event.key.toLowerCase())) {
         event.preventDefault();
     }
-}); */
+});

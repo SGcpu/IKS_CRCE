@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IKS</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Palatino Linotype', 'Book Antiqua', serif;
+            background-color: #f5e7d0;
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+        }
+
+        #canvas-container {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 80px); /* Adjusted for navbar height */
+            margin-top: 80px; /* Matches navbar height */
+        }
+
+        #canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #info {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+            color: #5c3a21;
+            font-size: 1.2em;
+            pointer-events: none;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
+        }
+
+        .ancient-button {
+            background: #8b5a2b;
+            color: #f5e7d0;
+            border: 2px solid #5c3a21;
+            border-radius: 50%;
+            font-family: 'Palatino Linotype', 'Book Antiqua', serif;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 10px;
+            transform: translate(-50%, -50%);
+        }
+
+        .ancient-button:hover {
+            background: #a07858;
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="college_logo">
+                <a href="https://www.frcrce.ac.in/"><img src="logo.png" alt="Frcrce Logo"></a>
+            </div>
+            <button class="nav-toggle">
+                <span class="hamburger"></span>
+            </button>
+            <div class="nav_elements">
+                <a href="#">Home</a>
+                <a href="#">Incharge</a>
+                <a href="#">Syllabus</a>
+                <a href="#">Projects</a>
+                <a href="#">Gallery</a>
+                <a href="#">Media</a>
+            </div>
+        </nav>
+    </header>
+
+    <div id="canvas-container">
+        <canvas id="canvas"></canvas>
+        <div id="info">Click the central seal to reveal ancient knowledge paths</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+
+    <script>
+        // Main variables
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let centralCircle, branchCircles = [];
+        let isAnimating = false;
+        let animationId;
+
+        // Ancient-themed knowledge paths
+        const branches = [
+            { name: "COMPS C", color: "#8b5a2b", symbol: "&#8706" },
+            { name: "CSE", color: "#5c3a21", symbol: "&#x222b" },
+            { name: "COMPS A", color: "#6b4423", symbol: "Ψ" },
+            { name: "MECH", color: "#7d4e24", symbol: "π" },
+            { name: "ECS", color: "#4e3019", symbol: "⚕" },
+            { name: "COMPS B", color: "#4e3019", symbol: "⚕" }
+        ];
+
+        // Set canvas size
+        function setCanvasSize() {
+            const container = document.getElementById('canvas-container');
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            
+            // Update central circle position
+            if (centralCircle) {
+                centralCircle.x = canvas.width / 2;
+                centralCircle.y = canvas.height / 2;
+            }
+        }
+
+        // Initialize the scene
+        function init() {
+            setCanvasSize();
+
+            // Create central circle
+            centralCircle = {
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                radius: 80,
+                color: "#5c3a21",
+                text: "Click Me",
+                rotation: 0
+            };
+
+            // Start animation loop
+            animate();
+
+            // Add event listeners
+            window.addEventListener('resize', onWindowResize);
+            canvas.addEventListener('click', onCanvasClick);
+        }
+
+        // Draw central circle
+        function drawCentralCircle() {
+            // Draw outer decorative circle
+            ctx.beginPath();
+            ctx.arc(centralCircle.x, centralCircle.y, centralCircle.radius + 10, 0, Math.PI * 2);
+            ctx.strokeStyle = "#8b5a2b";
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            // Draw main circle
+            ctx.beginPath();
+            ctx.arc(centralCircle.x, centralCircle.y, centralCircle.radius, 0, Math.PI * 2);
+            ctx.fillStyle = centralCircle.color;
+            ctx.fill();
+
+            // Draw decorative pattern
+            ctx.beginPath();
+            ctx.arc(centralCircle.x, centralCircle.y, centralCircle.radius - 10, 0, Math.PI * 2);
+            ctx.strokeStyle = "#f5e7d0";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw text
+            ctx.font = "bold 18px 'Palatino Linotype', 'Book Antiqua', serif";
+            ctx.fillStyle = "#f5e7d0";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(centralCircle.text, centralCircle.x, centralCircle.y);
+
+            // Add rotation if animating
+            if (isAnimating) {
+                centralCircle.rotation += 0.1;
+            }
+        }
+
+        // Create branch circles
+        function createBranchCircles() {
+            branchCircles = branches.map((branch, i) => {
+                const angle = (i / branches.length) * Math.PI * 2;
+                return {
+                    x: centralCircle.x,
+                    y: centralCircle.y,
+                    targetX: centralCircle.x + Math.cos(angle) * 200,
+                    targetY: centralCircle.y + Math.sin(angle) * 200,
+                    radius: 40,
+                    color: branch.color,
+                    name: branch.name,
+                    symbol: branch.symbol,
+                    angle: angle,
+                    initialAngle: angle,
+                    orbitRadius: 200,
+                    orbitSpeed: 0.02,
+                    element: null
+                };
+            });
+
+            // Animate branches coming out
+            branchCircles.forEach((circle, i) => {
+                const el = document.createElement('div');
+                el.className = 'ancient-button';
+                el.style.width = `${circle.radius * 2}px`;
+                el.style.height = `${circle.radius * 2}px`;
+                el.style.background = circle.color;
+                el.style.borderColor = darkenColor(circle.color, 30);
+                el.innerHTML = `<div>${circle.symbol}<br><span style="font-size:12px">${circle.name}</span></div>`;
+                el.style.left = `${circle.x}px`;
+                el.style.top = `${circle.y}px`;
+                document.getElementById('canvas-container').appendChild(el);
+
+                circle.element = el;
+
+                gsap.to(circle, {
+                    x: circle.targetX,
+                    y: circle.targetY,
+                    duration: 1,
+                    delay: i * 0.1,
+                    ease: "back.out(1.7)",
+                    onUpdate: () => {
+                        el.style.left = `${circle.x}px`;
+                        el.style.top = `${circle.y}px`;
+                    }
+                });
+            });
+
+            setTimeout(() => {
+                isAnimating = false;
+            }, 1500);
+        }
+
+        // Darken a color
+        function darkenColor(color, percent) {
+            const num = parseInt(color.replace("#", ""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) - amt;
+            const G = (num >> 8 & 0x00FF) - amt;
+            const B = (num & 0x0000FF) - amt;
+            return `#${(
+                0x1000000 +
+                (R < 0 ? 0 : R) * 0x10000 +
+                (G < 0 ? 0 : G) * 0x100 +
+                (B < 0 ? 0 : B)
+            ).toString(16).slice(1)}`;
+        }
+
+        // Handle canvas click
+        function onCanvasClick(event) {
+            if (isAnimating) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = event.clientX - rect.left;
+            const mouseY = event.clientY - rect.top;
+
+            // Check if click is on central circle
+            const distance = Math.sqrt(
+                Math.pow(mouseX - centralCircle.x, 2) +
+                Math.pow(mouseY - centralCircle.y, 2)
+            );
+
+            // If we haven't created branch circles yet, animate the central circle
+            if (branchCircles.length === 0 && distance <= centralCircle.radius) {
+                animateCentralCircle();
+                return;
+            }
+        }
+
+        // Animate the central circle spinning
+        function animateCentralCircle() {
+            isAnimating = true;
+            document.getElementById('info').style.display = 'none';
+
+            // Spin animation with GSAP
+            gsap.to(centralCircle, {
+                rotation: centralCircle.rotation + Math.PI * 10,
+                duration: 1.5,
+                ease: "power3.out",
+                onComplete: () => {
+                    createBranchCircles();
+                }
+            });
+        }
+
+        // Update orbiting branches
+        function updateOrbits() {
+            if (branchCircles.length === 0 || isAnimating) return;
+
+            let allCompleted180 = true;
+
+            branchCircles.forEach(circle => {
+                if (circle.angle < circle.initialAngle + Math.PI) {
+                    allCompleted180 = false;
+                    circle.angle += circle.orbitSpeed;
+                    circle.x = centralCircle.x + Math.cos(circle.angle) * circle.orbitRadius;
+                    circle.y = centralCircle.y + Math.sin(circle.angle) * circle.orbitRadius;
+
+                    if (circle.element) {
+                        circle.element.style.left = `${circle.x}px`;
+                        circle.element.style.top = `${circle.y}px`;
+                    }
+                }
+            });
+
+            if (allCompleted180) {
+                isAnimating = true;
+            }
+        }
+
+        // Handle window resize
+        function onWindowResize() {
+            setCanvasSize();
+            if (centralCircle) {
+                centralCircle.x = canvas.width / 2;
+                centralCircle.y = canvas.height / 2;
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawCentralCircle();
+            updateOrbits();
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Start the application
+        init();
+    </script>
+
+    <script src="main.js"></script>
+</body>
+</html>

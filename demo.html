@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Image Carousel</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background: #111; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script>
+        let scene = new THREE.Scene();
+        let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        let renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        let images = [
+            'https://via.placeholder.com/200x200/FF5733',
+            'https://via.placeholder.com/200x200/33FF57',
+            'https://via.placeholder.com/200x200/3357FF',
+            'https://via.placeholder.com/200x200/FFFF33',
+            'https://via.placeholder.com/200x200/FF33FF'
+        ];
+        
+        let radius = 5;
+        let angleStep = (2 * Math.PI) / images.length;
+        let textures = [], spheres = [];
+
+        images.forEach((img, i) => {
+            let texture = new THREE.TextureLoader().load(img);
+            let material = new THREE.MeshBasicMaterial({ map: texture });
+            let geometry = new THREE.SphereGeometry(1, 32, 32);
+            let sphere = new THREE.Mesh(geometry, material);
+            let angle = i * angleStep;
+            sphere.position.set(radius * Math.cos(angle), 0, radius * Math.sin(angle));
+            sphere.userData = { angle: angle, index: i };
+            scene.add(sphere);
+            spheres.push(sphere);
+        });
+
+        camera.position.z = 10;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            spheres.forEach(sphere => {
+                sphere.rotation.y += 0.01;
+            });
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener("click", (event) => {
+            let raycaster = new THREE.Raycaster();
+            let mouse = new THREE.Vector2();
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            let intersects = raycaster.intersectObjects(spheres);
+
+            if (intersects.length > 0) {
+                let selectedSphere = intersects[0].object;
+                gsap.to(camera.position, { z: 4, x: selectedSphere.position.x, y: selectedSphere.position.y, duration: 1, ease: "power2.out" });
+            }
+        });
+    </script>
+</body>
+</html>
