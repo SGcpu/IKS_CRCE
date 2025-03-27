@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch Details</title>
+    <style>
+        body {
+            font-family: 'Palatino Linotype', 'Book Antiqua', serif;
+            background-color: #f5e7d0;
+            background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .branch-section {
+            display: none;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .branch-header {
+            text-align: center;
+            color: #5c3a21;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #8b5a2b;
+            padding-bottom: 10px;
+        }
+        
+        .topic {
+            background: #fff;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .topic-header {
+            background: #8b5a2b;
+            color: white;
+            padding: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .topic-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: rgba(255,255,255,0.9);
+        }
+        
+        .topic.active .topic-content {
+            padding: 15px;
+            max-height: 1000px;
+        }
+        
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #5c3a21;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .branch-logo {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <a href="projects.html" class="back-button">← Back to branches</a>
+    
+    <!-- COMPS C Section -->
+    <div id="comps-c" class="branch-section">
+        <div class="branch-header">
+            <img src="comps-c-logo.png" alt="COMPS C Logo" class="branch-logo">
+            <h1>COMPS C Department</h1>
+        </div>
+        
+        <!-- Repeat this topic structure 13 times -->
+        <div class="topic">
+            <div class="topic-header">
+                <h3>Topic 1: Data Structures</h3>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="topic-content">
+                <p>Content about Data Structures in COMPS C...</p>
+                <div class="work-showcase">
+                    <!-- Student work examples -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="topic">
+            <div class="topic-header">
+                <h3>Topic 2: Algorithms</h3>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="topic-content">
+                <p>Content about Algorithms in COMPS C...</p>
+            </div>
+        </div>
+        
+        <!-- 11 more topics -->
+    </div>
+    
+    <!-- CSE Section -->
+    <div id="cse" class="branch-section">
+        <div class="branch-header">
+            <img src="cse-logo.png" alt="CSE Logo" class="branch-logo">
+            <h1>Computer Science Engineering</h1>
+        </div>
+        
+        <div class="topic">
+            <div class="topic-header">
+                <h3>Topic 1: Data Structures</h3>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="topic-content">
+                <p>Content about Data Structures in CSE...</p>
+            </div>
+        </div>
+        
+        <!-- 12 more topics -->
+    </div>
+    
+    <!-- COMPS A Section -->
+    <div id="comps-a" class="branch-section">
+        <!-- Similar structure -->
+    </div>
+    
+    <!-- MECH Section -->
+    <div id="mech" class="branch-section">
+        <!-- Similar structure -->
+    </div>
+    
+    <!-- ECS Section -->
+    <div id="ecs" class="branch-section">
+        <!-- Similar structure -->
+    </div>
+    
+    <!-- COMPS B Section -->
+    <div id="comps-b" class="branch-section">
+        <!-- Similar structure -->
+    </div>
+
+    <script>
+        // Get the branch parameter from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedBranch = urlParams.get('branch');
+        
+        // Show the selected branch section
+        if (selectedBranch) {
+            const branchSection = document.getElementById(selectedBranch);
+            if (branchSection) {
+                branchSection.style.display = 'block';
+            } else {
+                // Fallback if branch not found
+                document.getElementById('comps-c').style.display = 'block';
+            }
+        } else {
+            // Default branch if no parameter
+            document.getElementById('comps-c').style.display = 'block';
+        }
+        
+        // Add click handlers for topics
+        document.querySelectorAll('.topic-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const topic = header.parentElement;
+                topic.classList.toggle('active');
+                
+                // Update toggle icon
+                const icon = header.querySelector('.toggle-icon');
+                icon.textContent = topic.classList.contains('active') ? '−' : '+';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>IKS</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
@@ -15,6 +15,7 @@
             font-family: 'Palatino Linotype', 'Book Antiqua', serif;
             background-color: #f5e7d0;
             background-image: url('https://www.transparenttextures.com/patterns/parchment.png');
+            touch-action: manipulation;
         }
 
         #canvas-container {
@@ -22,12 +23,14 @@
             width: 100%;
             height: calc(100vh - 80px); /* Adjusted for navbar height */
             margin-top: 80px; /* Matches navbar height */
+            overflow: hidden;
         }
 
         #canvas {
             display: block;
             width: 100%;
             height: 100%;
+            touch-action: none;
         }
 
         #info {
@@ -58,11 +61,37 @@
             text-align: center;
             padding: 10px;
             transform: translate(-50%, -50%);
+            z-index: 10;
+            touch-action: manipulation;
         }
 
         .ancient-button:hover {
             background: #a07858;
             transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            #info {
+                font-size: 1em;
+                padding: 0 10px;
+            }
+            
+            .ancient-button {
+                font-size: 14px;
+                padding: 8px;
+            }
+            
+            .ancient-button span {
+                font-size: 10px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #info {
+                font-size: 0.9em;
+                top: 10px;
+            }
         }
     </style>
 </head>
@@ -89,7 +118,7 @@
 
     <div id="canvas-container">
         <canvas id="canvas"></canvas>
-        <div id="info">Click the central seal to reveal ancient knowledge paths</div>
+        <div id="info">Click the central seal to reveal branches</div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
@@ -101,6 +130,7 @@
         let centralCircle, branchCircles = [];
         let isAnimating = false;
         let animationId;
+        let isMobile = window.matchMedia("(max-width: 768px)").matches;
 
         // Ancient-themed knowledge paths
         const branches = [
@@ -122,6 +152,19 @@
             if (centralCircle) {
                 centralCircle.x = canvas.width / 2;
                 centralCircle.y = canvas.height / 2;
+                
+                // Adjust sizes for mobile
+                if (isMobile) {
+                    centralCircle.radius = 60;
+                    branchCircles.forEach(circle => {
+                        circle.radius = 30;
+                        circle.orbitRadius = 150;
+                        if (circle.element) {
+                            circle.element.style.width = `${circle.radius * 2}px`;
+                            circle.element.style.height = `${circle.radius * 2}px`;
+                        }
+                    });
+                }
             }
         }
 
@@ -133,7 +176,7 @@
             centralCircle = {
                 x: canvas.width / 2,
                 y: canvas.height / 2,
-                radius: 80,
+                radius: isMobile ? 60 : 80,
                 color: "#5c3a21",
                 text: "Click Me",
                 rotation: 0
@@ -145,6 +188,7 @@
             // Add event listeners
             window.addEventListener('resize', onWindowResize);
             canvas.addEventListener('click', onCanvasClick);
+            canvas.addEventListener('touchstart', onCanvasClick, { passive: false });
         }
 
         // Draw central circle
@@ -170,7 +214,7 @@
             ctx.stroke();
 
             // Draw text
-            ctx.font = "bold 18px 'Palatino Linotype', 'Book Antiqua', serif";
+            ctx.font = `bold ${isMobile ? 14 : 18}px 'Palatino Linotype', 'Book Antiqua', serif`;
             ctx.fillStyle = "#f5e7d0";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
@@ -184,20 +228,23 @@
 
         // Create branch circles
         function createBranchCircles() {
+            // Clear existing circles if any
+            document.querySelectorAll('.ancient-button').forEach(el => el.remove());
+            
             branchCircles = branches.map((branch, i) => {
                 const angle = (i / branches.length) * Math.PI * 2;
                 return {
                     x: centralCircle.x,
                     y: centralCircle.y,
-                    targetX: centralCircle.x + Math.cos(angle) * 200,
-                    targetY: centralCircle.y + Math.sin(angle) * 200,
-                    radius: 40,
+                    targetX: centralCircle.x + Math.cos(angle) * (isMobile ? 150 : 200),
+                    targetY: centralCircle.y + Math.sin(angle) * (isMobile ? 150 : 200),
+                    radius: isMobile ? 30 : 40,
                     color: branch.color,
                     name: branch.name,
                     symbol: branch.symbol,
                     angle: angle,
                     initialAngle: angle,
-                    orbitRadius: 200,
+                    orbitRadius: isMobile ? 150 : 200,
                     orbitSpeed: 0.02,
                     element: null
                 };
@@ -206,15 +253,25 @@
             // Animate branches coming out
             branchCircles.forEach((circle, i) => {
                 const el = document.createElement('div');
-                el.className = 'ancient-button';
+                el.className = 'ancient-button branch-circle';
+                el.dataset.branchName = circle.name;
                 el.style.width = `${circle.radius * 2}px`;
                 el.style.height = `${circle.radius * 2}px`;
                 el.style.background = circle.color;
                 el.style.borderColor = darkenColor(circle.color, 30);
-                el.innerHTML = `<div>${circle.symbol}<br><span style="font-size:12px">${circle.name}</span></div>`;
+                el.innerHTML = `<div>${circle.symbol}<br><span style="font-size:${isMobile ? '10px' : '12px'}">${circle.name}</span></div>`;
                 el.style.left = `${circle.x}px`;
                 el.style.top = `${circle.y}px`;
                 document.getElementById('canvas-container').appendChild(el);
+
+                // Add click/tap event to each branch circle
+                el.addEventListener('click', function() {
+                    handleBranchClick(circle.name);
+                });
+                el.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    handleBranchClick(circle.name);
+                }, { passive: false });
 
                 circle.element = el;
 
@@ -236,6 +293,18 @@
             }, 1500);
         }
 
+        // Handle branch circle clicks
+        function handleBranchClick(branchName) {
+            console.log(`Branch clicked: ${branchName}`);
+            // Add your branch-specific functionality here
+            window.location.href = `branches.html?branch=${branchName.toLowerCase().replace(' ', '-')}`;
+        }
+
+        // Get all branch circles (query selector)
+        function getAllBranchCircles() {
+            return document.querySelectorAll('.branch-circle');
+        }
+
         // Darken a color
         function darkenColor(color, percent) {
             const num = parseInt(color.replace("#", ""), 16);
@@ -254,10 +323,15 @@
         // Handle canvas click
         function onCanvasClick(event) {
             if (isAnimating) return;
+            
+            // Prevent default for touch events
+            if (event.type === 'touchstart') {
+                event.preventDefault();
+            }
 
             const rect = canvas.getBoundingClientRect();
-            const mouseX = event.clientX - rect.left;
-            const mouseY = event.clientY - rect.top;
+            const mouseX = event.clientX ? event.clientX - rect.left : event.touches[0].clientX - rect.left;
+            const mouseY = event.clientY ? event.clientY - rect.top : event.touches[0].clientY - rect.top;
 
             // Check if click is on central circle
             const distance = Math.sqrt(
@@ -284,6 +358,9 @@
                 ease: "power3.out",
                 onComplete: () => {
                     createBranchCircles();
+                    // Example of using the query selector
+                    const branches = getAllBranchCircles();
+                    console.log('All branch circles:', branches);
                 }
             });
         }
@@ -315,6 +392,7 @@
 
         // Handle window resize
         function onWindowResize() {
+            isMobile = window.matchMedia("(max-width: 768px)").matches;
             setCanvasSize();
             if (centralCircle) {
                 centralCircle.x = canvas.width / 2;
