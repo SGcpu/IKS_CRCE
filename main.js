@@ -71,6 +71,39 @@ window.onscroll = function () {
         document.querySelector(".navbar").style.boxShadow = "none";
     }
 };
+
+document.addEventListener('DOMContentLoaded', function() {
+    const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+    const navbar = document.querySelector('header, nav, .navbar, #navbar'); // Adjust selector
+    
+    // Show/hide button based on scroll position
+    window.addEventListener('scroll', function() {
+      if (window.pageYOffset > 300) {
+        scrollToTopBtn.classList.add('visible');
+      } else {
+        scrollToTopBtn.classList.remove('visible');
+      }
+    });
+    
+    // Smooth scroll to top/navbar
+    scrollToTopBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Try to scroll to navbar if found, otherwise to top
+      if (navbar) {
+        navbar.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
+      
+      // For accessibility - return focus if needed
+      this.blur();
+    });
+  });
+
 (function () {
     document.onkeydown = function (e) {
         if (e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || (e.ctrlKey && e.key === "U")) {

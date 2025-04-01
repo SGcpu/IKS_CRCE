@@ -1330,3 +1330,61 @@ footer {
         margin-bottom: 30px;
     }
 }
+.scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 99;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .scroll-to-top.visible {
+    display: flex;
+    opacity: 0.8;
+  }
+  
+  .scroll-to-top:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  
+  .scroll-to-top svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .scroll-to-top {
+      width: 44px;
+      height: 44px;
+      bottom: 15px;
+      right: 15px;
+    }
+    
+    .scroll-to-top svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .scroll-to-top {
+      width: 40px;
+      height: 40px;
+      bottom: 10px;
+      right: 10px;
+    }
+  }
