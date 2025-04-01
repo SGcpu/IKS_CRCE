@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,7 @@
             background-color: #f9f5f0;
             overflow-x: hidden;
         }
-        
+
         /* ===== Desktop Masonry Grid ===== */
         .grid {
             column-count: 3;
@@ -23,29 +24,29 @@
             max-width: 1400px;
             margin: 0 auto;
         }
-        
+
         .grid-item {
             break-inside: avoid;
             margin-bottom: 20px;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
             background: white;
         }
-        
+
         .grid-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
-        
+
         .grid-img {
             width: 100%;
             height: auto;
             display: block;
             transition: transform 0.4s ease;
         }
-        
+
         /* ===== Mobile Carousel ===== */
         .mobile-carousel {
             display: none;
@@ -54,37 +55,37 @@
             position: relative;
             padding: 20px 0;
         }
-        
+
         .carousel-track {
             display: flex;
             transition: transform 0.5s ease;
             padding: 0 20px;
         }
-        
+
         .carousel-slide {
             min-width: 85%;
             padding: 0 10px;
         }
-        
+
         .carousel-img-container {
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             background: white;
         }
-        
+
         .carousel-img {
             width: 100%;
             height: auto;
             display: block;
         }
-        
+
         .carousel-nav {
             display: flex;
             justify-content: center;
             margin-top: 15px;
         }
-        
+
         .carousel-dot {
             width: 10px;
             height: 10px;
@@ -93,11 +94,11 @@
             margin: 0 5px;
             cursor: pointer;
         }
-        
+
         .carousel-dot.active {
             background: #8b5a2b;
         }
-        
+
         /* ===== Common Elements ===== */
         .filter-controls {
             display: flex;
@@ -108,9 +109,9 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        
+
         .filter-btn {
             background: #f0e6d2;
             border: none;
@@ -121,18 +122,19 @@
             color: #5c3a21;
             transition: all 0.2s ease;
         }
-        
-        .filter-btn:hover, .filter-btn.active {
+
+        .filter-btn:hover,
+        .filter-btn.active {
             background: #8b5a2b;
             color: white;
         }
-        
+
         .loader {
             text-align: center;
             padding: 30px;
             display: none;
         }
-        
+
         .lightbox {
             display: none;
             position: fixed;
@@ -140,19 +142,19 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0, 0, 0, 0.9);
             z-index: 1000;
             align-items: center;
             justify-content: center;
         }
-        
+
         .lightbox-img {
             max-width: 90%;
             max-height: 80vh;
             border-radius: 5px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
-        
+
         .close-lightbox {
             position: absolute;
             top: 20px;
@@ -161,28 +163,28 @@
             font-size: 30px;
             cursor: pointer;
         }
-        
+
         /* ===== Responsive ===== */
         @media (max-width: 900px) {
             .grid {
                 column-count: 2;
             }
         }
-        
+
         @media (max-width: 768px) {
             .grid {
                 display: none;
             }
-            
+
             .mobile-carousel {
                 display: block;
             }
-            
+
             .filter-controls {
                 flex-wrap: wrap;
                 padding: 15px 10px;
             }
-            
+
             .filter-btn {
                 padding: 6px 12px;
                 font-size: 0.9rem;
@@ -190,6 +192,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <nav class="navbar">
@@ -209,7 +212,7 @@
             </div>
         </nav>
     </header>
-    
+
     <!-- Filter Controls -->
     <div class="filter-controls">
         <button class="filter-btn active" data-filter="all">All</button>
@@ -217,7 +220,7 @@
         <button class="filter-btn" data-filter="lectures">Lectures</button>
         <!-- <button class="filter-btn" data-filter="events">Events</button> -->
     </div>
-    
+
     <!-- Desktop Masonry Grid -->
     <div class="grid" id="image-grid">
         <div class="grid-item" data-category="workshops">
@@ -239,7 +242,7 @@
             <img src="images/flipbook/img_vedas.jpeg" alt="Vedic Sciences Event" class="grid-img" loading="lazy">
         </div>
     </div>
-    
+
     <!-- Mobile Carousel -->
     <div class="mobile-carousel" id="mobile-carousel">
         <div class="carousel-track" id="carousel-track">
@@ -276,25 +279,26 @@
         </div>
         <div class="carousel-nav" id="carousel-dots"></div>
     </div>
-    
+
     <!-- Loading Indicator -->
     <div class="loader" id="loader">
         <i class="fas fa-spinner fa-spin"></i>
     </div>
-    
+
     <!-- Lightbox -->
     <div class="lightbox" id="lightbox">
         <span class="close-lightbox">&times;</span>
         <img class="lightbox-img" id="lightbox-image" src="" alt="">
     </div>
     <button id="scrollToTopBtn" class="scroll-to-top" aria-label="Scroll to top">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 15l-6-6-6 6"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 15l-6-6-6 6" />
         </svg>
-      </button>
+    </button>
     <script src="main.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // DOM Elements
             const filterButtons = document.querySelectorAll('.filter-btn');
             const grid = document.getElementById('image-grid');
@@ -302,14 +306,14 @@
             const lightbox = document.getElementById('lightbox');
             const lightboxImg = document.getElementById('lightbox-image');
             const closeBtn = document.querySelector('.close-lightbox');
-            
+
             // Mobile Carousel Elements
             const carouselTrack = document.getElementById('carousel-track');
             const carouselDots = document.getElementById('carousel-dots');
             let currentSlide = 0;
             let touchStartX = 0;
             let touchEndX = 0;
-            
+
             // Initialize carousel dots
             function initCarouselDots() {
                 const slides = document.querySelectorAll('.carousel-slide');
@@ -321,32 +325,32 @@
                     carouselDots.appendChild(dot);
                 });
             }
-            
+
             // Go to specific slide
             function goToSlide(index) {
                 const slides = document.querySelectorAll('.carousel-slide');
                 if (index >= slides.length || index < 0) return;
-                
+
                 currentSlide = index;
                 const slideWidth = slides[0].offsetWidth;
                 carouselTrack.style.transform = `translateX(-${currentSlide * (slideWidth + 20)}px)`;
-                
+
                 // Update dots
                 document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
                     dot.classList.toggle('active', i === currentSlide);
                 });
             }
-            
+
             // Handle touch events for swipe
             function handleTouchStart(e) {
                 touchStartX = e.changedTouches[0].screenX;
             }
-            
+
             function handleTouchEnd(e) {
                 touchEndX = e.changedTouches[0].screenX;
                 handleSwipe();
             }
-            
+
             function handleSwipe() {
                 if (touchEndX < touchStartX - 50) {
                     // Swipe left - next slide
@@ -356,15 +360,15 @@
                     goToSlide(currentSlide - 1);
                 }
             }
-            
+
             // Initialize mobile carousel
             function initMobileCarousel() {
                 initCarouselDots();
-                
+
                 // Add touch events
                 carouselTrack.addEventListener('touchstart', handleTouchStart, false);
                 carouselTrack.addEventListener('touchend', handleTouchEnd, false);
-                
+
                 // Add click events to carousel images
                 document.querySelectorAll('.carousel-img').forEach(img => {
                     img.addEventListener('click', () => {
@@ -375,11 +379,11 @@
                     });
                 });
             }
-            
+
             // Filter images by category
             function filterImages(category) {
                 const allItems = document.querySelectorAll('.grid-item');
-                
+
                 allItems.forEach(item => {
                     if (category === 'all' || item.dataset.category === category) {
                         item.style.display = 'block';
@@ -388,7 +392,7 @@
                     }
                 });
             }
-            
+
             // Open lightbox
             function openLightbox(e) {
                 lightboxImg.src = e.target.src;
@@ -396,13 +400,13 @@
                 lightbox.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             }
-            
+
             // Close lightbox
             function closeLightbox() {
                 lightbox.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
-            
+
             // Initialize event listeners
             function initEventListeners() {
                 // Filter buttons
@@ -413,25 +417,25 @@
                         filterImages(button.dataset.filter);
                     });
                 });
-                
+
                 // Lightbox close
                 closeBtn.addEventListener('click', closeLightbox);
                 lightbox.addEventListener('click', (e) => {
                     if (e.target === lightbox) closeLightbox();
                 });
-                
+
                 // Add click events to desktop images
                 document.querySelectorAll('.grid-img').forEach(img => {
                     img.addEventListener('click', openLightbox);
                 });
             }
-            
+
             // Initialize everything
             initEventListeners();
             if (window.innerWidth <= 768) {
                 initMobileCarousel();
             }
-            
+
             // Handle window resize
             window.addEventListener('resize', () => {
                 if (window.innerWidth <= 768 && !document.querySelector('.carousel-dot')) {
@@ -439,6 +443,26 @@
                 }
             });
         });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Navigation toggle code
+            const navToggle = document.querySelector(".nav-toggle");
+            const navLinks = document.querySelectorAll(".nav_elements a");
+
+            if (navToggle) {
+                // Toggle navigation menu on hamburger click
+                navToggle.addEventListener("click", () => {
+                    document.body.classList.toggle("nav-open");
+                });
+            }
+
+            // Close navigation menu when a link is clicked
+            navLinks.forEach((link) => {
+                link.addEventListener("click", () => {
+                    document.body.classList.remove("nav-open");
+                });
+            });
+        });
     </script>
 </body>
+
 </html>

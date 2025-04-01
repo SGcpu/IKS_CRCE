@@ -21,8 +21,10 @@
         #canvas-container {
             position: relative;
             width: 100%;
-            height: calc(100vh - 80px); /* Adjusted for navbar height */
-            margin-top: 80px; /* Matches navbar height */
+            height: calc(100vh - 80px);
+            /* Adjusted for navbar height */
+            margin-top: 80px;
+            /* Matches navbar height */
             overflow: hidden;
         }
 
@@ -76,12 +78,12 @@
                 font-size: 1em;
                 padding: 0 10px;
             }
-            
+
             .ancient-button {
                 font-size: 14px;
                 padding: 8px;
             }
-            
+
             .ancient-button span {
                 font-size: 10px !important;
             }
@@ -121,8 +123,9 @@
         <div id="info">Click the central seal to reveal branches</div>
     </div>
     <button id="scrollToTopBtn" class="scroll-to-top" aria-label="Scroll to top">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M18 15l-6-6-6 6"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 15l-6-6-6 6" />
         </svg>
     </button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
@@ -151,12 +154,12 @@
             const container = document.getElementById('canvas-container');
             canvas.width = container.clientWidth;
             canvas.height = container.clientHeight;
-            
+
             // Update central circle position
             if (centralCircle) {
                 centralCircle.x = canvas.width / 2;
                 centralCircle.y = canvas.height / 2;
-                
+
                 // Adjust sizes for mobile
                 if (isMobile) {
                     centralCircle.radius = 60;
@@ -234,7 +237,7 @@
         function createBranchCircles() {
             // Clear existing circles if any
             document.querySelectorAll('.ancient-button').forEach(el => el.remove());
-            
+
             branchCircles = branches.map((branch, i) => {
                 const angle = (i / branches.length) * Math.PI * 2;
                 return {
@@ -269,10 +272,10 @@
                 document.getElementById('canvas-container').appendChild(el);
 
                 // Add click/tap event to each branch circle
-                el.addEventListener('click', function() {
+                el.addEventListener('click', function () {
                     handleBranchClick(circle.name);
                 });
-                el.addEventListener('touchend', function(e) {
+                el.addEventListener('touchend', function (e) {
                     e.preventDefault();
                     handleBranchClick(circle.name);
                 }, { passive: false });
@@ -327,7 +330,7 @@
         // Handle canvas click
         function onCanvasClick(event) {
             if (isAnimating) return;
-            
+
             // Prevent default for touch events
             if (event.type === 'touchstart') {
                 event.preventDefault();
@@ -411,6 +414,25 @@
             updateOrbits();
             animationId = requestAnimationFrame(animate);
         }
+        document.addEventListener('DOMContentLoaded', function () {
+            // Navigation toggle code
+            const navToggle = document.querySelector(".nav-toggle");
+            const navLinks = document.querySelectorAll(".nav_elements a");
+
+            if (navToggle) {
+                // Toggle navigation menu on hamburger click
+                navToggle.addEventListener("click", () => {
+                    document.body.classList.toggle("nav-open");
+                });
+            }
+
+            // Close navigation menu when a link is clicked
+            navLinks.forEach((link) => {
+                link.addEventListener("click", () => {
+                    document.body.classList.remove("nav-open");
+                });
+            });
+        });
 
         // Start the application
         init();
@@ -418,4 +440,5 @@
 
     <script src="main.js"></script>
 </body>
+
 </html>
