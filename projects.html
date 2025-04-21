@@ -414,25 +414,6 @@
             updateOrbits();
             animationId = requestAnimationFrame(animate);
         }
-        document.addEventListener('DOMContentLoaded', function () {
-            // Navigation toggle code
-            const navToggle = document.querySelector(".nav-toggle");
-            const navLinks = document.querySelectorAll(".nav_elements a");
-
-            if (navToggle) {
-                // Toggle navigation menu on hamburger click
-                navToggle.addEventListener("click", () => {
-                    document.body.classList.toggle("nav-open");
-                });
-            }
-
-            // Close navigation menu when a link is clicked
-            navLinks.forEach((link) => {
-                link.addEventListener("click", () => {
-                    document.body.classList.remove("nav-open");
-                });
-            });
-        });
 
         // Start the application
         init();

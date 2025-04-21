@@ -1332,59 +1332,55 @@ footer {
 }
 .scroll-to-top {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
+    bottom: 30px;
+    right: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--primary-color, #0C2461);
     color: white;
     border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    display: none;
     opacity: 0;
+    transform: translateY(20px);
     transition: opacity 0.3s, transform 0.3s;
-    z-index: 99;
+    z-index: 1000;
+    display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .scroll-to-top.visible {
-    display: flex;
-    opacity: 0.8;
-  }
-  
-  .scroll-to-top:hover {
+}
+
+.scroll-to-top.visible {
     opacity: 1;
-    transform: translateY(-2px);
-  }
-  
-  .scroll-to-top svg {
-    width: 20px;
-    height: 20px;
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .scroll-to-top {
-      width: 44px;
-      height: 44px;
-      bottom: 15px;
-      right: 15px;
-    }
-    
-    .scroll-to-top svg {
-      width: 18px;
-      height: 18px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .scroll-to-top {
-      width: 40px;
-      height: 40px;
-      bottom: 10px;
-      right: 10px;
-    }
-  }
+    transform: translateY(0);
+}
+
+.scroll-to-top:hover {
+    background-color: var(--secondary-color, #1e3799);
+}
+
+.scroll-to-top:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+}
+
+/* Add responsive iframe container for YouTube videos */
+.responsive-iframe-container {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.responsive-iframe-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}

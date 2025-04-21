@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Branch Details</title>
+    <link rel="icon" href="assets/images/logo.png" type="image/png">
+    <!-- Barba.js for smooth page transitions -->
+    <script src="https://unpkg.com/@barba/core"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <style>
         body {
             font-family: 'Palatino Linotype', 'Book Antiqua', serif;
@@ -76,81 +80,83 @@
         }
     </style>
 </head>
-<body>
-    <a href="projects.html" class="back-button">← Back to branches</a>
-    
-    <!-- COMPS C Section -->
-    <div id="comps-c" class="branch-section">
-        <div class="branch-header">
-            <img src="comps-c-logo.png" alt="COMPS C Logo" class="branch-logo">
-            <h1>COMPS C Department</h1>
-        </div>
+<body data-barba="wrapper">
+    <div data-barba="container" data-barba-namespace="branches">
+        <a href="projects.html" class="back-button">← Back to branches</a>
         
-        <!-- Repeat this topic structure 13 times -->
-        <div class="topic">
-            <div class="topic-header">
-                <h3>Topic 1: Data Structures</h3>
-                <span class="toggle-icon">+</span>
+        <!-- COMPS C Section -->
+        <div id="comps-c" class="branch-section">
+            <div class="branch-header">
+                <img src="comps-c-logo.png" alt="COMPS C Logo" class="branch-logo">
+                <h1>COMPS C Department</h1>
             </div>
-            <div class="topic-content">
-                <p>Content about Data Structures in COMPS C...</p>
-                <div class="work-showcase">
-                    <!-- Student work examples -->
+            
+            <!-- Repeat this topic structure 13 times -->
+            <div class="topic">
+                <div class="topic-header">
+                    <h3>Topic 1: Data Structures</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="topic-content">
+                    <p>Content about Data Structures in COMPS C...</p>
+                    <div class="work-showcase">
+                        <!-- Student work examples -->
+                    </div>
                 </div>
             </div>
+            
+            <div class="topic">
+                <div class="topic-header">
+                    <h3>Topic 2: Algorithms</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="topic-content">
+                    <p>Content about Algorithms in COMPS C...</p>
+                </div>
+            </div>
+            
+            <!-- 11 more topics -->
         </div>
         
-        <div class="topic">
-            <div class="topic-header">
-                <h3>Topic 2: Algorithms</h3>
-                <span class="toggle-icon">+</span>
+        <!-- CSE Section -->
+        <div id="cse" class="branch-section">
+            <div class="branch-header">
+                <img src="cse-logo.png" alt="CSE Logo" class="branch-logo">
+                <h1>Computer Science Engineering</h1>
             </div>
-            <div class="topic-content">
-                <p>Content about Algorithms in COMPS C...</p>
+            
+            <div class="topic">
+                <div class="topic-header">
+                    <h3>Topic 1: Data Structures</h3>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="topic-content">
+                    <p>Content about Data Structures in CSE...</p>
+                </div>
             </div>
+            
+            <!-- 12 more topics -->
         </div>
         
-        <!-- 11 more topics -->
-    </div>
-    
-    <!-- CSE Section -->
-    <div id="cse" class="branch-section">
-        <div class="branch-header">
-            <img src="cse-logo.png" alt="CSE Logo" class="branch-logo">
-            <h1>Computer Science Engineering</h1>
+        <!-- COMPS A Section -->
+        <div id="comps-a" class="branch-section">
+            <!-- Similar structure -->
         </div>
         
-        <div class="topic">
-            <div class="topic-header">
-                <h3>Topic 1: Data Structures</h3>
-                <span class="toggle-icon">+</span>
-            </div>
-            <div class="topic-content">
-                <p>Content about Data Structures in CSE...</p>
-            </div>
+        <!-- MECH Section -->
+        <div id="mech" class="branch-section">
+            <!-- Similar structure -->
         </div>
         
-        <!-- 12 more topics -->
-    </div>
-    
-    <!-- COMPS A Section -->
-    <div id="comps-a" class="branch-section">
-        <!-- Similar structure -->
-    </div>
-    
-    <!-- MECH Section -->
-    <div id="mech" class="branch-section">
-        <!-- Similar structure -->
-    </div>
-    
-    <!-- ECS Section -->
-    <div id="ecs" class="branch-section">
-        <!-- Similar structure -->
-    </div>
-    
-    <!-- COMPS B Section -->
-    <div id="comps-b" class="branch-section">
-        <!-- Similar structure -->
+        <!-- ECS Section -->
+        <div id="ecs" class="branch-section">
+            <!-- Similar structure -->
+        </div>
+        
+        <!-- COMPS B Section -->
+        <div id="comps-b" class="branch-section">
+            <!-- Similar structure -->
+        </div>
     </div>
 
     <script>
@@ -184,5 +190,7 @@
             });
         });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
