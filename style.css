@@ -495,15 +495,16 @@ body {
 }
 
 /* Overlap effect for specific items */
+/* Removed negative margins to fix flipbook layout */
 .event_item:nth-child(3) {
-    margin-top: -30px;
-    margin-left: -20px;
-    z-index: 2;
+    margin-top: 0;
+    margin-left: 0;
+    z-index: 1;
 }
 
 .event_item:nth-child(7) {
-    margin-top: -20px;
-    z-index: 2;
+    margin-top: 0;
+    z-index: 1;
 }
 #text_event {
     text-align: center;

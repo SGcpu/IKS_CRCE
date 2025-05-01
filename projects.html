@@ -348,28 +348,47 @@
 
             // If we haven't created branch circles yet, animate the central circle
             if (branchCircles.length === 0 && distance <= centralCircle.radius) {
+                isAnimating = true; // Set isAnimating immediately to prevent multiple clicks
                 animateCentralCircle();
                 return;
             }
         }
 
-        // Animate the central circle spinning
+        // Animate the central circle spinning with enhanced GSAP animation
         function animateCentralCircle() {
             isAnimating = true;
             document.getElementById('info').style.display = 'none';
 
-            // Spin animation with GSAP
-            gsap.to(centralCircle, {
-                rotation: centralCircle.rotation + Math.PI * 10,
-                duration: 1.5,
-                ease: "power3.out",
+            // Enhanced animation: rotate, scale, and color change
+            gsap.timeline({
                 onComplete: () => {
                     createBranchCircles();
-                    // Example of using the query selector
                     const branches = getAllBranchCircles();
                     console.log('All branch circles:', branches);
                 }
-            });
+            })
+            .to(centralCircle, {
+                rotation: centralCircle.rotation + Math.PI * 10,
+                duration: 1.5,
+                ease: "power3.out"
+            })
+            .to(centralCircle, {
+                scale: 1.3,
+                duration: 0.3,
+                ease: "power1.inOut"
+            }, "-=1.2")
+            .to(centralCircle, {
+                scale: 1,
+                duration: 0.3,
+                ease: "power1.inOut"
+            })
+            .to(centralCircle, {
+                color: "#a07858",
+                duration: 0.4,
+                yoyo: true,
+                repeat: 1,
+                ease: "power1.inOut"
+            }, "-=1.5");
         }
 
         // Update orbiting branches
